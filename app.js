@@ -545,7 +545,7 @@ var betStore = new Store('bet', {
     num: 0,
     error: undefined
   },
-    currentBet: {
+    curentBet: {
     str: '1',
     num: 1,
     error: undefined
@@ -2294,7 +2294,7 @@ Dispatcher.sendAction('TOGGLE_HOTKEYS');
 		  disabled: (stopped == 0 && worldStore.state.hotkeysEnabled == false && continueafterdeath == 1)
           },
           worldStore.state.hotkeysEnabled ?
-            'Cashout: '+ (parseFloat(betStore.state.currentBet.num/100)).toFixed(2)+" bits" :
+            'Cashout: '+ (parseFloat(betStore.state.currentBet/100)).toFixed(2)+" bits" :
           'Place Bet'
         )
       )
