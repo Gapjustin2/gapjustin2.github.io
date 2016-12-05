@@ -545,11 +545,6 @@ var betStore = new Store('bet', {
     num: 0,
     error: undefined
   },
-    curentBet: {
-    str: '1',
-    num: 1,
-    error: undefined
-  },
     HouseEdge :0.01,
   // Edited for automation by https://www.moneypot.com/users/gapjustin
   hotkeysEnabled: false
@@ -603,10 +598,6 @@ var betStore = new Store('bet', {
   
         Dispatcher.registerCallback('UPDATE_ONWIN', function(newonwin) {
     self.state.onwin = _.merge({}, self.state.onwin, newonwin);
-    self.emitter.emit('change', self.state);
-  });  
-        Dispatcher.registerCallback('UPDATE_CURBET', function(onbet) {
-    self.state.currentBet = _.merge({}, self.state.currentBet, onbet);
     self.emitter.emit('change', self.state);
   });
   
@@ -2041,7 +2032,6 @@ curmultiplier = 100;
 houseedgerunning = 1;
 		  }
           // Update next bet hash
-          HotkeyToggle.render;
           Dispatcher.sendAction('SET_NEXT_HASH', bet.next_hash);
 
 
@@ -2060,28 +2050,16 @@ houseedgerunning = 1;
 		        
 		if (bet.profit >= 0 && worldStore.state.hotkeysEnabled == true && stopped == 0) {
 		currentBet = currentBet+bet.profit;
-      Dispatcher.sendAction('UPDATE_CURBET', {
-        num: currentBet,
-        error: null
-      });
 		plusbits = Math.floor(totalmultiplier-0.01)/100
 		totalmultiplier = totalmultiplier+plusbits;
 		currentMultiplier = totalmultiplier/(totalmultiplier-plusbits);
 		} else if (bet.profit >= 0 && worldStore.state.hotkeysEnabled == false && stopped == 0 ){
 		if (continueafterdeath == 0){
 		currentBet = betStore.state.wager.num;
-      Dispatcher.sendAction('UPDATE_CURBET', {
-        num: currentBet,
-        error: null
-      });
 		stopped = 1;
 		worldStore.state.hotkeysEnabled = false;
 		} else {
 		currentBet = 1
-      Dispatcher.sendAction('UPDATE_CURBET', {
-        num: currentBet,
-        error: null
-      });
 		plusbits = Math.floor(totalmultiplier-0.01)/100
 		totalmultiplier = totalmultiplier+plusbits;
 		currentMultiplier = totalmultiplier/(totalmultiplier-plusbits);
@@ -2091,10 +2069,6 @@ houseedgerunning = 1;
 		if (bet.profit < 0) {
 		if (worldStore.state.hotkeysEnabled == true && stopped == 0 ){
 		currentBet = betStore.state.wager.num;
-      Dispatcher.sendAction('UPDATE_CURBET', {
-        num: currentBet,
-        error: null
-      });
 if (worldStore.state.currBetTab == 'BETTING'){
 		stopped = 1;
 		Dispatcher.sendAction('TOGGLE_HOTKEYS');
@@ -2129,10 +2103,6 @@ if (worldStore.state.currBetTab == 'BETTING'){
 		multiplied = 1;
 		}
 		currentBet = betStore.state.wager.num;
-      Dispatcher.sendAction('UPDATE_CURBET', {
-        num: currentBet,
-        error: null
-      });
 if (worldStore.state.currBetTab == 'BETTING'){
 		stopped = 1;
 		bet.busted = betbust;
@@ -2294,7 +2264,7 @@ Dispatcher.sendAction('TOGGLE_HOTKEYS');
 		  disabled: (stopped == 0 && worldStore.state.hotkeysEnabled == false && continueafterdeath == 1)
           },
           worldStore.state.hotkeysEnabled ?
-            'Cashout: '+ (parseFloat(betStore.state.currentBet/100)).toFixed(2)+" bits" :
+            'Cashout: '+ (parseFloat(currentBet/100)).toFixed(2)+" bits" :
           'Place Bet'
         )
       )
